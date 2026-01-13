@@ -4,11 +4,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {
-            isAllowInsecureProtocol = true
-            url = uri("http://jcenter.bintray.com")
-        }
-
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.11.2")
