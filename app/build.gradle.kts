@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.yausername.youtubedl_android_example"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.yausername.youtubedl_android_example"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionName = rootProject.ext["versionName"] as String
         versionCode = rootProject.ext["versionCode"] as Int
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

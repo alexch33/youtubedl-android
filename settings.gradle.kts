@@ -1,12 +1,23 @@
-include(":common", ":app", ":library")
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        id("com.android.application") version "8.11.2" apply false
+        id("com.android.library") version "8.11.2" apply false
+        id("org.jetbrains.kotlin.android") version "1.7.22" apply false
+    }
+}
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        // e.g this is how you would add jitpack
-        maven("https://jitpack.io")
-        // Add any repositories you would be adding to all projects here
+        maven { url = uri("https://jitpack.io") }
     }
 }
+
+include(":common", ":app", ":library")

@@ -1,6 +1,5 @@
 package com.yausername.youtubedl_android
 
-import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPom
@@ -9,40 +8,43 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
 
+internal fun Project.configurePublishingToGithubPackages() {
+    afterEvaluate {
+        configure<PublishingExtension> {
+            publications {
+                create<MavenPublication>("release") {
+                    groupId = "com.github.alexch33"
+                    artifactId = project.name // Use the module's name as the artifactId
+                    version = project.version.toString()
 
-internal fun Project.configurePublish(id: String) {
-
-    configure<PublishingExtension> {
-        publications {
-            create<MavenPublication>("release") {
-                groupId = "io.github.junkfood02.youtubedl-android"
-                artifactId = id
-                version = project.version.toString()
-
-                afterEvaluate {
                     from(components["release"])
-                }
 
-                pom {
-                    commonPomConfiguration()
+                    pom {
+                        commonPomConfiguration(project)
+                    }
                 }
             }
-        }
 
-        repositories {
-            maven {
-                url = uri(rootProject.buildDir.resolve("staging-deploy").absolutePath)
+            repositories {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/alexch33/youtubedl-android")
+                    credentials {
+                        username = System.getenv("GITHUB_ACTOR")
+                        password = System.getenv("GITHUB_TOKEN")
+                    }
+                }
             }
         }
     }
 }
 
 
-internal fun MavenPom.commonPomConfiguration() {
-    name.set("youtubedl-android")
-    description.set("youtube-dl for Android")
-    url.set("https://github.com/yausername/youtubedl-android")
-    inceptionYear.set("2019")
+internal fun MavenPom.commonPomConfiguration(project: Project) {
+    name.set(project.name)
+    description.set("A forked version of youtubedl-android.")
+    url.set("https://github.com/alexch33/youtubedl-android") // Link to fork
+    inceptionYear.set("2024")
     licenses {
         license {
             name.set("GPL-3.0 license")
@@ -51,12 +53,12 @@ internal fun MavenPom.commonPomConfiguration() {
     }
     developers {
         developer {
-            id.set("yausername")
-            name.set("yausername")
+            id.set("alexch33")
+            name.set("alexch33")
         }
     }
     scm {
-        connection.set("scm:git:https://github.com/yausername/youtubedl-android")
-        url.set("https://github.com/yausername/youtubedl-android")
+        connection.set("scm:git:https://github.com/alexch33/youtubedl-android.git")
+        url.set("https://github.com/alexch33/youtubedl-android")
     }
 }

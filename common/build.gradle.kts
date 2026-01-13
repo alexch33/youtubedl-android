@@ -1,3 +1,11 @@
+buildscript {
+    repositories {
+        maven {
+            url = uri("../build/libs")
+        }
+    }
+}
+
 plugins {
     id("com.yausername.youtubedl_android")
     id("com.android.library")
@@ -6,7 +14,7 @@ plugins {
 
 android {
     namespace = "com.yausername.youtubedl_common"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24

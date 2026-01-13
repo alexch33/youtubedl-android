@@ -1,31 +1,21 @@
 plugins {
     `kotlin-dsl`
-    id("signing")
-    id("maven-publish")
 }
 
 repositories {
-    mavenCentral()
     google()
+    mavenCentral()
 }
 
 dependencies {
     implementation("com.android.tools.build:gradle:8.11.2")
-    implementation(gradleApi())
-    implementation(localGroovy())
 }
 
 gradlePlugin {
     plugins {
-        create("PublishPlugin") {
-            id = "com.yausername.youtubedl_android"
+        create("youtubedl-android") {
+            id = "com.yausername.youtubedl_android" // The ID of root project
             implementationClass = "com.yausername.youtubedl_android.PublishPlugin"
         }
-    }
-}
-
-kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }

@@ -1,29 +1,17 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    val kotlin_version by extra("1.7.22")
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.11.2")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
+plugins {
+    id("com.yausername.youtubedl_android") apply false
 }
 
 val versionMajor = 0
 val versionMinor = 18
 val versionPatch = 1
-val versionBuild = 0 // bump for dogfood builds, public betas, etc.
+val versionBuild = 0
 val versionCode = versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
 val versionName = "$versionMajor.$versionMinor.$versionPatch"
 
 extra.apply {
     set("versionCode", versionCode)
-    set("versionName", "$versionMajor.$versionMinor.$versionPatch")
+    set("versionName", versionName)
     set("appCompatVer", "1.4.2")
     set("junitVer", "4.13.2")
     set("androidJunitVer", "1.1.3")
@@ -38,10 +26,3 @@ allprojects {
     group = "com.github.yausername"
     version = versionName
 }
-
-tasks.register<Delete>("clean") {
-    delete(rootProject.layout.buildDirectory)
-}
-
-
-
