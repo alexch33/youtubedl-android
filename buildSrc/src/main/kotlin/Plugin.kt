@@ -20,15 +20,12 @@ open class PublishPlugin : Plugin<Project> {
         project.afterEvaluate {
             project.extensions.getByType<PublishConfigurationExtension>().run {
                 if (isPublished) {
-                    println("Published!")
+                    println("Publishing to GitHub Packages...")
                     project.configureAndroid()
-                    project.configurePublish(id = artifactId)
+                    project.configurePublishingToGithubPackages()
                     project.configureSigning()
                 }
             }
         }
     }
 }
-
-
-
