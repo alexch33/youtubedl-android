@@ -11,7 +11,7 @@ buildscript {
 
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.13.0")
+        classpath("com.android.tools.build:gradle:8.11.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -48,27 +48,5 @@ tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
 
-tasks.register("packagePublishedArtifacts") {
-    val librariesToPublish = listOf("common", "library", "aria2c", "ffmpeg")
-    librariesToPublish.forEach {
-        dependsOn(":$it:publishReleasePublicationToMavenRepository")
-    }
-    doLast {
-        exec {
-            workingDir = project.buildDir.resolve("staging-deploy")
-            standardOutput = System.out
-            errorOutput = System.err
-
-            val zipCommands = listOf(
-                "zip",
-                "-r",
-                project.buildDir.resolve("archive-$versionName.zip").absolutePath,
-            ) + librariesToPublish.map { "io/github/junkfood02/youtubedl-android/$it/$versionName" }
-
-            commandLine(zipCommands)
-        }
-    }
-
-}
 
 

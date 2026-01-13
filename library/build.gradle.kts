@@ -1,14 +1,12 @@
 plugins {
     id("com.yausername.youtubedl_android")
-    id("signing")
     id("com.android.library")
-    id("maven-publish")
     id("org.jetbrains.kotlin.android")
 }
 
 android {
     namespace = "com.yausername.youtubedl_android"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
@@ -25,11 +23,6 @@ android {
             )
         }
     }
-}
-
-configurePublishing {
-    artifactId = project.name
-    isPublished = true
 }
 
 dependencies {

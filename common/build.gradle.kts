@@ -1,8 +1,6 @@
 plugins {
     id("com.yausername.youtubedl_android")
-    id("signing")
     id("com.android.library")
-    id("maven-publish")
     id("org.jetbrains.kotlin.android")
 }
 
@@ -23,11 +21,6 @@ android {
             )
         }
     }
-}
-
-configurePublishing {
-    artifactId = project.name
-    isPublished = true
 }
 
 dependencies {
