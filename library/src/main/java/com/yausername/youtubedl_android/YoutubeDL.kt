@@ -1,5 +1,6 @@
 package com.yausername.youtubedl_android
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -48,14 +49,16 @@ object YoutubeDL {
         initialized = true
     }
 
+    @SuppressLint("DiscouragedApi")
     @kotlin.jvm.Throws(YoutubeDLException::class)
     fun init_ytdlp(appContext: Context, ytdlpDir: File) {
         if (!ytdlpDir.exists()) ytdlpDir.mkdirs()
         val ytdlpBinary = File(ytdlpDir, ytdlpBin)
         if (!ytdlpBinary.exists()) {
             try {
-                val inputStream =
-                    appContext.resources.openRawResource(R.raw.ytdlp) /* will be renamed to yt-dlp */
+                val resourceId = appContext.resources.getIdentifier("ytdlp", "raw", appContext.packageName)
+                val inputStream = appContext.resources.openRawResource(resourceId)
+
                 FileUtils.copyInputStreamToFile(inputStream, ytdlpBinary)
             } catch (e: java.lang.Exception) {
                 FileUtils.deleteQuietly(ytdlpDir)
