@@ -56,7 +56,11 @@ object YoutubeDL {
         val ytdlpBinary = File(ytdlpDir, ytdlpBin)
         if (!ytdlpBinary.exists()) {
             try {
-                val resourceId = appContext.resources.getIdentifier("ytdlp", "raw", appContext.packageName)
+                val resourceId = appContext.resources.getIdentifier(
+                    "ytdlp",
+                    "raw",
+                    "com.yausername.youtubedl_android"
+                )
                 val inputStream = appContext.resources.openRawResource(resourceId)
 
                 FileUtils.copyInputStreamToFile(inputStream, ytdlpBinary)
