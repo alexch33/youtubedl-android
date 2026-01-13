@@ -21,13 +21,19 @@ This library **must be built from source**.
 Include this repository as a Git submodule or copy it into your project:
 
 ```
+git submodule add https://github.com/alexch33/youtubedl-android.git youtubedl-android
+git submodule init
+git submodule update --remote
+```
+
+```
 <project-root>/youtubedl-android
 ```
 
 Then include the module in `settings.gradle` / `settings.gradle.kts`:
 
 ```
-include(":youtubedl-android")
+includeBuild("youtubedl-android")
 ```
 
 ### 2. Add dependencies
@@ -36,7 +42,7 @@ In your app module:
 
 ```
 dependencies {
-    implementation(project(":youtubedl-android"))
+    implementation("com.github.yausername:library")
 }
 ```
 
@@ -44,13 +50,6 @@ Provide FFmpeg and (optionally) Aria2c via separate, reproducible packages.
 
 ```
 implementation("com.antonkarpenko:ffmpeg-kit-full-gpl:2.1.0")
-```
-
-### 3. AndroidManifest
-
-```
-<application
-    android:extractNativeLibs="true" />
 ```
 
 This is required so external binaries are accessible at runtime.
