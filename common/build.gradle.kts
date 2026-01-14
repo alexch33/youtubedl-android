@@ -10,6 +10,8 @@ plugins {
     id("com.yausername.youtubedl_android")
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
+    id("signing")
 }
 
 android {
@@ -30,6 +32,60 @@ android {
         }
     }
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            afterEvaluate {
+                from(components["release"])
+            }
+
+            groupId = "io.github.alexch33"
+            artifactId = "common"
+            version = "0.18.1-alexch33-2"
+
+            pom {
+                name.set("youtubedl-android-common")
+                description.set("Common utilities for youtubedl-android.")
+                url.set("https://github.com/alexch33/youtubedl-android")
+                licenses {
+                    license {
+                        name.set("The Unlicense")
+                        url.set("http://unlicense.org/")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("alexch33")
+                        name.set("Alexey")
+                        email.set("i3poac@gmail.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:github.com/alexch33/youtubedl-android.git")
+                    developerConnection.set("scm:git:ssh://github.com/alexch33/youtubedl-android.git")
+                    url.set("https://github.com/alexch33/youtubedl-android/tree/master")
+                }
+            }
+        }
+    }
+}
+
+signing {
+    val secretKey = project.findProperty("signing.secretKeyRingFile")?.let {
+        project.rootProject.file(it).readText()
+    }
+    val password = project.findProperty("signing.password")?.toString()
+
+    if (secretKey != null && password != null) {
+        println("GPG secret key file found. Configuring signing for :common...")
+        useInMemoryPgpKeys(secretKey, password)
+        sign(publishing.publications["release"])
+    } else {
+        println("signing.secretKeyRingFile or signing.password not found in :common, skipping signing.")
+    }
+}
+
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))

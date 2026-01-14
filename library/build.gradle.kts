@@ -33,9 +33,9 @@ publishing {
             afterEvaluate {
                 from(components["release"])
             }
-            groupId = "io.github.alexch33" // Or project.group.toString()
+            groupId = "io.github.alexch33"
             artifactId = "youtubedl-android"
-            version = "0.18.1-alexch33-1" // Or project.version.toString()
+            version = "0.18.1-alexch33-2"
 
             pom {
                 name.set("youtubedl-android")
