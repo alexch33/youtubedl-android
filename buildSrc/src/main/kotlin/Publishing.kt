@@ -5,31 +5,23 @@ import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPom
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.named
 import org.gradle.plugins.signing.SigningExtension
 
 internal fun Project.configurePublishingToMavenCentral() {
-    val isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
-
     configure<PublishingExtension> {
-        publications {
-            create<MavenPublication>("release") {
-                groupId = "com.github.alexch33"
-                artifactId = project.name
-                version = project.version.toString()
+        publications.named<MavenPublication>("release") {
+            groupId = "io.github.alexch33"
+            version = project.version.toString()
 
-                from(components["release"])
-
-                pom {
-                    commonPomConfiguration(project)
-                }
+            pom {
+                commonPomConfiguration(project)
             }
         }
 
         repositories {
             maven {
-                name = "Sonatype"
+                name = "SonatypeCentral"
                 url = uri("https://central.sonatype.com/api/v1/publisher/upload")
                 credentials {
                     username = project.property("ossrhUsername").toString()
@@ -39,9 +31,8 @@ internal fun Project.configurePublishingToMavenCentral() {
         }
     }
 
-    // Configure GPG Signing
     configure<SigningExtension> {
-        sign(project.extensions.getByType(PublishingExtension::class.java).publications)
+        sign(project.extensions.getByType(PublishingExtension::class.java).publications.getByName("release"))
     }
 }
 
