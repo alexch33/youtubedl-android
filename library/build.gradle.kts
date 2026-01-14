@@ -25,12 +25,57 @@ android {
             )
         }
     }
+}
 
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-            withJavadocJar()
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            afterEvaluate {
+                from(components["release"])
+            }
+            groupId = "io.github.alexch33" // Or project.group.toString()
+            artifactId = "youtubedl-android"
+            version = "0.18.1-alexch33-1" // Or project.version.toString()
+
+            pom {
+                name.set("youtubedl-android")
+                description.set("A lib for downloading youtube videos in android.")
+                url.set("https://github.com/alexch33/youtubedl-android")
+                licenses {
+                    license {
+                        name.set("The Unlicense")
+                        url.set("http://unlicense.org/`s")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("alexch33")
+                        name.set("Alexey")
+                        email.set("i3poac@gmail.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:github.com/alexch33/youtubedl-android.git")
+                    developerConnection.set("scm:git:ssh://github.com/alexch33/youtubedl-android.git")
+                    url.set("https://github.com/alexch33/youtubedl-android/tree/master")
+                }
+            }
         }
+    }
+}
+
+signing {
+    val secretKey = project.findProperty("signing.secretKeyRingFile")?.let {
+        project.rootProject.file(it).readText()
+    }
+    val password = project.findProperty("signing.password")?.toString()
+
+    if (secretKey != null && password != null) {
+        println("GPG secret key file found. Configuring signing for :library...")
+        useInMemoryPgpKeys(secretKey, password)
+        sign(publishing.publications["release"])
+    } else {
+        println("signing.secretKeyRingFile or signing.password not found, skipping signing.")
     }
 }
 
