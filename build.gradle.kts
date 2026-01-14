@@ -23,6 +23,6 @@ extra.apply {
 }
 
 allprojects {
-    group = "com.github.yausername"
+    group = "io.github.alexch33"
     version = versionName
 }
