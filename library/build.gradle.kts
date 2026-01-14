@@ -1,16 +1,9 @@
-import com.yausername.youtubedl_android.PublishConfigurationExtension
-
 plugins {
     id("com.yausername.youtubedl_android")
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("maven-publish")
     id("signing")
-}
-
-project.extensions.configure<PublishConfigurationExtension>("configurePublishing") {
-    isPublished = true
-    artifactId = "youtubedl-android"
 }
 
 android {
@@ -34,64 +27,55 @@ android {
     }
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            afterEvaluate {
                 from(components["release"])
+            }
+            groupId = "io.github.alexch33" // Or project.group.toString()
+            artifactId = "youtubedl-android"
+            version = "0.18.1-alexch33-1" // Or project.version.toString()
 
-                groupId = "io.github.alexch33"
-                artifactId = "youtubedl-android"
-                version = "0.18.1-alexch33-1"
-
-                pom {
-                    name.set("youtubedl-android")
-                    description.set("A forked version of youtubedl-android.")
-                    url.set("https://github.com/alexch33/youtubedl-android")
-                    licenses {
-                        license {
-                            name.set("GPL-3.0 license")
-                            url.set("https://www.gnu.org/licenses/gpl-3.0.en.html")
-                        }
-                    }
-                    developers {
-                        developer {
-                            id.set("alexch33")
-                            name.set("alexch33")
-                        }
-                    }
-                    scm {
-                        connection.set("scm:git:https://github.com/alexch33/youtubedl-android.git")
-                        url.set("https://github.com/alexch33/youtubedl-android")
+            pom {
+                name.set("youtubedl-android")
+                description.set("A lib for downloading youtube videos in android.")
+                url.set("https://github.com/alexch33/youtubedl-android")
+                licenses {
+                    license {
+                        name.set("The Unlicense")
+                        url.set("http://unlicense.org/`s")
                     }
                 }
-            }
-        }
-
-        repositories {
-            maven {
-                name = "SonatypeCentral"
-                url = uri("https://central.sonatype.com/api/v1/publisher/upload")
-                credentials {
-                    username = project.property("ossrhUsername").toString()
-                    password = project.property("ossrhPassword").toString()
+                developers {
+                    developer {
+                        id.set("alexch33")
+                        name.set("Alexey")
+                        email.set("i3poac@gmail.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:github.com/alexch33/youtubedl-android.git")
+                    developerConnection.set("scm:git:ssh://github.com/alexch33/youtubedl-android.git")
+                    url.set("https://github.com/alexch33/youtubedl-android/tree/master")
                 }
             }
         }
     }
-    signing {
-        val secretKey = project.findProperty("signing.secretKeyRingFile")?.let {
-            project.rootProject.file(it).readText()
-        }
-        val password = project.findProperty("signing.password")?.toString()
+}
 
-        if (secretKey != null && password != null) {
-            println("GPG secret key file found. Configuring signing...")
-            useInMemoryPgpKeys(secretKey, password)
-            sign(publishing.publications["release"])
-        } else {
-            println("signing.secretKeyRingFile or signing.password not found, skipping signing.")
-        }
+signing {
+    val secretKey = project.findProperty("signing.secretKeyRingFile")?.let {
+        project.rootProject.file(it).readText()
+    }
+    val password = project.findProperty("signing.password")?.toString()
+
+    if (secretKey != null && password != null) {
+        println("GPG secret key file found. Configuring signing for :library...")
+        useInMemoryPgpKeys(secretKey, password)
+        sign(publishing.publications["release"])
+    } else {
+        println("signing.secretKeyRingFile or signing.password not found, skipping signing.")
     }
 }
 

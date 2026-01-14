@@ -1,6 +1,37 @@
+import java.util.Properties
+
 plugins {
     id("com.yausername.youtubedl_android") apply false
+    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
+    localPropertiesFile.inputStream().use { input ->
+        localProperties.load(input)
+    }
+    localProperties.forEach { (key, value) ->
+        extra.set(key.toString(), value.toString())
+    }
+}
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+
+            username.set(property("ossrhUsername").toString())
+            password.set(property("ossrhPassword").toString())
+        }
+    }
+    transitionCheckOptions {
+        maxRetries.set(60)
+        delayBetween.set(java.time.Duration.ofSeconds(10))
+    }
+}
+
 
 val versionMajor = 0
 val versionMinor = 18
