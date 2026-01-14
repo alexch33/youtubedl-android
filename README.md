@@ -4,7 +4,7 @@ This is a minimal fork of the original
 [youtubedl-android](https://github.com/yausername/youtubedl-android) library.
 
 All bundled native binaries (**FFmpeg** and **Aria2c**) have been **removed**.
-The library relies entirely on **external binaries available via `PATH`**, making it suitable for **F-Droid reproducible builds**.
+The library relies entirely on **external binaries available via `PATH`**
 
 ## Changes
 
@@ -24,7 +24,7 @@ dependencies {
 }
 ```
 
-Provide FFmpeg(optionally) and Aria2c(optionally) via separate, reproducible packages.
+Provide FFmpeg(optionally) and Aria2c(optionally) via separate packages.
 
 ```
 implementation("com.antonkarpenko:ffmpeg-kit-full-gpl:2.1.0")
