@@ -30,11 +30,7 @@ internal fun Project.configurePublishingToMavenCentral() {
         repositories {
             maven {
                 name = "Sonatype"
-                url = if (isReleaseVersion) {
-                    uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                } else {
-                    uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-                }
+                url = uri("https://central.sonatype.com/api/v1/publisher/upload")
                 credentials {
                     username = project.property("ossrhUsername").toString()
                     password = project.property("ossrhPassword").toString()
