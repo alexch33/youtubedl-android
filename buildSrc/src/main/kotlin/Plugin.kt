@@ -22,8 +22,7 @@ open class PublishPlugin : Plugin<Project> {
                 if (isPublished) {
                     println("Publishing to GitHub Packages...")
                     project.configureAndroid()
-                    project.configurePublishingToGithubPackages()
-                    project.configureSigning()
+                    project.configurePublishingToMavenCentral()
                 }
             }
         }

@@ -7,35 +7,45 @@ import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.get
+import org.gradle.plugins.signing.SigningExtension
 
-internal fun Project.configurePublishingToGithubPackages() {
-    afterEvaluate {
-        configure<PublishingExtension> {
-            publications {
-                create<MavenPublication>("release") {
-                    groupId = "com.github.alexch33"
-                    artifactId = project.name // Use the module's name as the artifactId
-                    version = project.version.toString()
+internal fun Project.configurePublishingToMavenCentral() {
+    val isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
 
-                    from(components["release"])
+    configure<PublishingExtension> {
+        publications {
+            create<MavenPublication>("release") {
+                groupId = "com.github.alexch33"
+                artifactId = project.name
+                version = project.version.toString()
 
-                    pom {
-                        commonPomConfiguration(project)
-                    }
-                }
-            }
+                from(components["release"])
 
-            repositories {
-                maven {
-                    name = "GitHubPackages"
-                    url = uri("https://maven.pkg.github.com/alexch33/youtubedl-android")
-                    credentials {
-                        username = System.getenv("GITHUB_ACTOR")
-                        password = System.getenv("GITHUB_TOKEN")
-                    }
+                pom {
+                    commonPomConfiguration(project)
                 }
             }
         }
+
+        repositories {
+            maven {
+                name = "Sonatype"
+                url = if (isReleaseVersion) {
+                    uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                } else {
+                    uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                }
+                credentials {
+                    username = project.property("ossrhUsername").toString()
+                    password = project.property("ossrhPassword").toString()
+                }
+            }
+        }
+    }
+
+    // Configure GPG Signing
+    configure<SigningExtension> {
+        sign(project.extensions.getByType(PublishingExtension::class.java).publications)
     }
 }
 
