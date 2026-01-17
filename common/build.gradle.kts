@@ -42,7 +42,7 @@ publishing {
 
             groupId = "io.github.alexch33"
             artifactId = "common"
-            version = "0.18.1-alexch33-2"
+            version = "0.18.1-alexch33-3"
 
             pom {
                 name.set("youtubedl-android-common")
