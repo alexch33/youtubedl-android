@@ -26,7 +26,7 @@ object YoutubeDL {
     private val idProcessMap = Collections.synchronizedMap(HashMap<String, Process>())
 
     @Synchronized
-    @kotlin.jvm.Throws(YoutubeDLException::class)
+    @Throws(YoutubeDLException::class)
     fun init(appContext: Context) {
         if (initialized) return
         val baseDir = File(appContext.noBackupFilesDir, baseName)
@@ -50,28 +50,23 @@ object YoutubeDL {
     }
 
     @SuppressLint("DiscouragedApi")
-    @kotlin.jvm.Throws(YoutubeDLException::class)
+    @Throws(YoutubeDLException::class)
     fun init_ytdlp(appContext: Context, ytdlpDir: File) {
         if (!ytdlpDir.exists()) ytdlpDir.mkdirs()
         val ytdlpBinary = File(ytdlpDir, ytdlpBin)
         if (!ytdlpBinary.exists()) {
             try {
-                val resourceId = appContext.resources.getIdentifier(
-                    "ytdlp",
-                    "raw",
-                    "com.yausername.youtubedl_android"
-                )
-                val inputStream = appContext.resources.openRawResource(resourceId)
-
+                val inputStream =
+                    appContext.resources.openRawResource(R.raw.ytdlp)
                 FileUtils.copyInputStreamToFile(inputStream, ytdlpBinary)
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 FileUtils.deleteQuietly(ytdlpDir)
                 throw YoutubeDLException("failed to initialize", e)
             }
         }
     }
 
-    @kotlin.jvm.Throws(YoutubeDLException::class)
+    @Throws(YoutubeDLException::class)
     fun initPython(appContext: Context, pythonDir: File) {
         val pythonLib = File(binDir, pythonLibName)
         // using size of lib as version
@@ -101,7 +96,7 @@ object YoutubeDL {
         check(initialized) { "instance not initialized" }
     }
 
-    @kotlin.jvm.Throws(
+    @Throws(
         YoutubeDLException::class,
         InterruptedException::class,
         CanceledException::class
@@ -111,7 +106,7 @@ object YoutubeDL {
         return getInfo(request)
     }
 
-    @kotlin.jvm.Throws(
+    @Throws(
         YoutubeDLException::class,
         InterruptedException::class,
         CanceledException::class
@@ -163,7 +158,7 @@ object YoutubeDL {
 
     class CanceledException : java.lang.Exception()
 
-    @kotlin.jvm.Throws(
+    @Throws(
         YoutubeDLException::class,
         InterruptedException::class,
         CanceledException::class
@@ -176,8 +171,8 @@ object YoutubeDL {
         return executeImpl(request, processId, false, callback)
     }
 
-    @kotlin.jvm.JvmOverloads
-    @kotlin.jvm.Throws(
+    @JvmOverloads
+    @Throws(
         YoutubeDLException::class,
         InterruptedException::class,
         CanceledException::class
@@ -191,7 +186,7 @@ object YoutubeDL {
         return executeImpl(request, processId, redirectErrorStream, callback)
     }
 
-    @kotlin.jvm.Throws(
+    @Throws(
         YoutubeDLException::class,
         InterruptedException::class,
         CanceledException::class
@@ -275,7 +270,7 @@ object YoutubeDL {
     }
 
     @Synchronized
-    @kotlin.jvm.Throws(YoutubeDLException::class)
+    @Throws(YoutubeDLException::class)
     fun updateYoutubeDL(
         appContext: Context,
         updateChannel: UpdateChannel = UpdateChannel.STABLE
@@ -309,13 +304,13 @@ object YoutubeDL {
             UpdateChannel("https://api.github.com/repos/yt-dlp/yt-dlp-master-builds/releases/latest")
 
         companion object {
-            @kotlin.jvm.JvmField
+            @JvmField
             val _STABLE: STABLE = STABLE
 
-            @kotlin.jvm.JvmField
+            @JvmField
             val _NIGHTLY: NIGHTLY = NIGHTLY
 
-            @kotlin.jvm.JvmField
+            @JvmField
             val _MASTER: MASTER = MASTER
         }
     }
@@ -332,6 +327,6 @@ object YoutubeDL {
     private const val pythonLibVersion = "pythonLibVersion"
     val objectMapper = ObjectMapper()
 
-    @kotlin.jvm.JvmStatic
+    @JvmStatic
     fun getInstance() = this
 }
